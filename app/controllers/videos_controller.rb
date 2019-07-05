@@ -29,7 +29,7 @@ class VideosController < ApplicationController
     respond_to do |format|
       if @video.save
         # send email
-        VideoMailer.with(title: @video.title).video_created.deliver_now # not using background job
+        VideoMailerWorker.perform_async(@video.title)
 
         # redirect
         format.html { redirect_to @video, notice: 'Video was successfully created.' }
