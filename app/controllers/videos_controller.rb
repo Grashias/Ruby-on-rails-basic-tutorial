@@ -28,6 +28,10 @@ class VideosController < ApplicationController
 
     respond_to do |format|
       if @video.save
+        # send email
+        VideoMailer.with(title: @video.title).video_created.deliver_now # not using background job
+
+        # redirect
         format.html { redirect_to @video, notice: 'Video was successfully created.' }
         format.json { render :show, status: :created, location: @video }
       else
